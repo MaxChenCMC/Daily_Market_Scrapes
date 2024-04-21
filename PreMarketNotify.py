@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import requests, pandas as pd
 import plotly.graph_objs as go
 from NotifyBase import NotifyBase
