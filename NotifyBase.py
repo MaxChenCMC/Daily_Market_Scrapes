@@ -6,7 +6,7 @@ def NotifyBase(acct: str, msg: str, arg):
     15:10
     16:30
     '''
-    elif acct == "1": token = "TVR9kcFsdDS0Si7YtusO4bl3gcgUUjKz248yXivtJ56"  # 個人開發😎先選【透過1 對1】
+    token = "TVR9kcFsdDS0Si7YtusO4bl3gcgUUjKz248yXivtJ56"  # 個人開發😎先選【透過1 對1】
 
     # if acct == "0": token = 'Ww9Y7PSHCNkdmdGkxpdPT54vMGf0VaZBoMZH7BudlVS'    # 台股數據通知中心
     # elif acct == "1": token = "TVR9kcFsdDS0Si7YtusO4bl3gcgUUjKz248yXivtJ56"  # 個人開發😎先選【透過1 對1】
