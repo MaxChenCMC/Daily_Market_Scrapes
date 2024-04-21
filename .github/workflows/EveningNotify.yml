@@ -1,11 +1,7 @@
 name: EveningNofity
 on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
   schedule:
-    - cron: '30 13 * * *' 
+    - cron: '30 8 * * 1-5' 
 permissions:
   contents: read
 jobs:
