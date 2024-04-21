@@ -1,22 +1,16 @@
 name: EveningNofity
-
 on:
   push:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
-    
   schedule:
     - cron: '30 8 * * 1-5' 
-
 permissions:
   contents: read
-
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v3
     - name: Set up Python 3.10
