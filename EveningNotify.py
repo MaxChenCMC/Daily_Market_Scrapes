@@ -10,7 +10,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 # !pip install -U kaleido
 """
 
-import pandas as pd
+import requests, pandas as pd
 from datetime import datetime, timedelta
 import plotly.graph_objs as go
 from NotifyBase import NotifyBase
