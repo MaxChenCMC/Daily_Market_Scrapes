@@ -1,6 +1,6 @@
 import requests
 
-def NotifyBase(acct: str, msg: str, arg):
+def NotifyBase(acct="1", msg: str, arg):
     '''
     08:30
     15:10
