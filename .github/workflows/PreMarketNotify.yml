@@ -1,17 +1,13 @@
 name: PreMarketNotify
-
 on:
   push:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
-    
   schedule:
     - cron: '30 0 * * 1-5' 
-
 permissions:
   contents: read
-
 jobs:
   build:
     runs-on: ubuntu-latest
