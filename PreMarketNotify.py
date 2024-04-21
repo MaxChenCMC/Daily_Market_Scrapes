@@ -7,7 +7,7 @@ from NotifyBase import NotifyBase
 
 def MopsYYYMMDD(audience: str):
     '''
-    08:30
+    '30 0 * * 1-5'
     不能選"_q1"會爬不到，過12想爬只能手動寫死日期
     '''
     # Monday = 0, Friday = 4
@@ -33,7 +33,7 @@ def MopsYYYMMDD(audience: str):
     
 def AnnouncementNoticeYYYYMMDD(audience: str):
     '''
-    # 08:30
+    '30 0 * * 1-5'
     '''
     if datetime.now().weekday() == 5: YYYYMMDD = (datetime.now() - timedelta(days = 1)).strftime("%Y%m%d")
     elif datetime.now().weekday() == 6: YYYYMMDD = (datetime.now() - timedelta(days = 2)).strftime("%Y%m%d")
