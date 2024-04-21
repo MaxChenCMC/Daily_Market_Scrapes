@@ -5,3 +5,4 @@ pandas==1.4.0
 plotly==5.3.1
 requests==2.26.0
 selenium==4.1.0
+lxml==4.7.3
