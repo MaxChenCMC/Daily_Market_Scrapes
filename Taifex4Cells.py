@@ -5,7 +5,7 @@ from NotifyBase import NotifyBase
 
 def TotalTableDate(audience: str):
     '''
-    # 15:10
+    '10 7 * * 1-5' 
     '''
     df = pd.read_html("https://www.taifex.com.tw/cht/3/totalTableDate", encoding="utf-8")[0]
     col1 = df[(         '交易口數與契約金額',                 '多方',   '口數')].tolist()
@@ -106,5 +106,5 @@ def Taifex4Cells(audience):
     [msg.append(i + "\n") for i in [url, df.iloc[-5:].to_string(index = False, col_space = 6)]]
     NotifyBase(audience, "文", "\n".join(msg))
 
-TotalTableDate("2")
-Taifex4Cells("2")
+TotalTableDate("0")
+Taifex4Cells("0")
