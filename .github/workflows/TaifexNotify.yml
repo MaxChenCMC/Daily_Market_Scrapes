@@ -7,7 +7,7 @@ on:
     branches: [ "main" ]
     
   schedule:
-    - cron: '10 7 * * 1-5' 
+    - cron: '40 13 * * *' 
 
 permissions:
   contents: read
