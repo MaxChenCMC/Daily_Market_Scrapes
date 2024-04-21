@@ -49,5 +49,5 @@ def AnnouncementNoticeYYYYMMDD(audience: str):
     NotifyBase(audience, "文", "\n".join(msg))
 
 
-MopsYYYMMDD("2")
-AnnouncementNoticeYYYYMMDD("2")
+MopsYYYMMDD("0")
+AnnouncementNoticeYYYYMMDD("0")
