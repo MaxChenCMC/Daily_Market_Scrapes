@@ -3,6 +3,35 @@ from bs4 import BeautifulSoup
 from datetime import datetime
 from NotifyBase import NotifyBase
 
+def TotalTableDate(audience: str):
+    '''
+    # 15:10
+    '''
+    df = pd.read_html("https://www.taifex.com.tw/cht/3/totalTableDate", encoding="utf-8")[0]
+    col1 = df[(         '交易口數與契約金額',                 '多方',   '口數')].tolist()
+    col2 = df[(         '交易口數與契約金額',                 '空方',   '口數')].tolist()
+    col3 = df[(         '交易口數與契約金額',               '多空淨額',   '口數')].tolist()
+    pd.DataFrame([col1, col2, col3], columns=["","多方","空方","淨額"])
+    df = pd.DataFrame([col1, col2, col3], columns = ["自營商", "投信", "外資", "合計"], index = ["多方","空方","淨額"]).T
+    title = "▌期交所三大法人總表_交易口數"
+    url = "https://www.taifex.com.tw/cht/3/totalTableDate"
+    msg = ["\n" + title]
+    [msg.append(i + "\n") for i in [url, df.to_string(index = True, col_space = 10)]]
+    NotifyBase(audience, "文", "\n".join(msg))
+
+    df = pd.read_html("https://www.taifex.com.tw/cht/3/totalTableDate", encoding="utf-8")[1]
+    col1 = df[(        '未平倉口數與契約金額',                 '多方',   '口數')].tolist()
+    col2 = df[(        '未平倉口數與契約金額',                 '空方',   '口數')].tolist()
+    col3 = df[(        '未平倉口數與契約金額',               '多空淨額',   '口數')].tolist()
+    pd.DataFrame([col1, col2, col3], columns=["","多方","空方","淨額"])
+    df = pd.DataFrame([col1, col2, col3], columns = ["自營商", "投信", "外資", "合計"], index = ["多方","空方","淨額"]).T
+    
+    title = "▌期交所三大法人總表_未平倉口數"
+    url = "https://www.taifex.com.tw/cht/3/totalTableDate"
+    msg = ["\n" + title]
+    [msg.append(i + "\n") for i in [url, df.to_string(index = True, col_space = 10)]]
+    NotifyBase(audience, "文", "\n".join(msg))
+
 
 def largeTraderFutQry() -> list[int]:
     url = "https://www.taifex.com.tw/cht/3/largeTraderFutQry"
@@ -77,5 +106,5 @@ def Taifex4Cells(audience):
     [msg.append(i + "\n") for i in [url, df.iloc[-5:].to_string(index = False, col_space = 6)]]
     NotifyBase(audience, "文", "\n".join(msg))
 
-    
-Taifex4Cells("1")
+TotalTableDate("2")
+Taifex4Cells("2")
