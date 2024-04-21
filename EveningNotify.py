@@ -17,7 +17,7 @@ from NotifyBase import NotifyBase
 
 def TwseT86YYYYMMDD(audience: str):
     '''
-    # 16:30
+    '30 8 * * 1-5' 
     '''
     if datetime.now().weekday() == 5: YYYYMMDD = (datetime.now() - timedelta(days = 1)).strftime("%Y%m%d")
     elif datetime.now().weekday() == 6: YYYYMMDD = (datetime.now() - timedelta(days = 2)).strftime("%Y%m%d")
@@ -90,6 +90,6 @@ def Candlestick(audience: str):
     NotifyBase(audience, "圖", "RanksCandlestick.png")    
 
     
-TwseT86YYYYMMDD("2")
-RankTradingVolTWD("2")
-Candlestick("2")
+TwseT86YYYYMMDD("0")
+RankTradingVolTWD("0")
+Candlestick("0")
