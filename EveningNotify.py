@@ -90,6 +90,6 @@ def Candlestick(audience: str):
     NotifyBase(audience, "圖", "RanksCandlestick.png")    
 
     
-TwseT86YYYYMMDD("1")
-RankTradingVolTWD("1")
-Candlestick("1")
+TwseT86YYYYMMDD("2")
+RankTradingVolTWD("2")
+Candlestick("2")
