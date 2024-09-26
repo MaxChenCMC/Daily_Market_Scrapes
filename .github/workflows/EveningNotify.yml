@@ -1,7 +1,7 @@
 name: EveningNofity
 on:
   schedule:
-    - cron: '30 8 * * 1-5' 
+    - cron: '59 12 * * 1-5' 
 permissions:
   contents: read
 jobs:
@@ -19,4 +19,4 @@ jobs:
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     - name: Run Python Script
       run: |
-        python EveningNotify.py
+        python MaxDaily.py
