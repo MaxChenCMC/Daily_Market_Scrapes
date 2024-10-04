@@ -34,7 +34,7 @@ def step1(mkt_type: str) -> pd.DataFrame:
     for i in range(len(res)):
         if res[i]['DispEName'] in DispEName_range_call:
             test.append([
-                res[i]['CTime'],
+                # res[i]['CTime'],
                 res[i]['DispEName'][-6:],
                 res[i]['CBestBidPrice'],
                 res[i]['CLastPrice'],
@@ -42,14 +42,14 @@ def step1(mkt_type: str) -> pd.DataFrame:
             ])
         elif res[i]['DispEName'] in DispEName_range_put:
             test.append([
-                res[i]['CTime'],
+                # res[i]['CTime'],
                 res[i]['DispEName'][-6:],
                 res[i]['CBestBidPrice'],
                 res[i]['CLastPrice'],
                 res[i]['CBestAskPrice']
             ])
-    # return res
-    df = pd.DataFrame(test, columns = ["Time", "Stike", "Bid", "Close", "Ask"])
+    # return res  "Time", 
+    df = pd.DataFrame(test, columns = ["Stike", "Bid", "Close", "Ask"])
     df[["Bid", "Close", "Ask"]] = df[["Bid", "Close", "Ask"]].astype(float)
 
     ts = (datetime.now()+ timedelta(hours = 8)).strftime('%H:%M:%M')
@@ -62,8 +62,8 @@ def step1(mkt_type: str) -> pd.DataFrame:
     ]
     return df #, pd.DataFrame(ret)
 
-arg = step1("1")
+arg = step1("1").to_string(index = False)
 token = 'Ww9Y7PSHCNkdmdGkxpdPT54vMGf0VaZBoMZH7BudlVS'
 url = 'https://notify-api.line.me/api/notify'
 headers = {'Authorization': 'Bearer ' + token} 
-response = requests.post(url, headers = headers,  data={'message': arg})
+requests.post(url, headers = headers,  data={'message': "\n" + arg})
