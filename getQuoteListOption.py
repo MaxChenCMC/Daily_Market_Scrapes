@@ -33,14 +33,14 @@ def strike_range_df(src):
         if quote_table[i]['DispEName'] in src:
             _temp.append([
                 # 'time', 'strike', 'mid_price', 'spread'
-                (datetime.now()+ timedelta(hours = 8)).strftime("%Y-%m-%d %H:%M:%S"),
+                (datetime.now()+ timedelta(hours = 8)).strftime("%H:%M:%S"),
                 quote_table[i]['DispEName'][-6:-1],
                 (float(quote_table[i]['CBestAskPrice']) + float(quote_table[i]['CBestBidPrice'])) / 2,
                 float(quote_table[i]['CBestAskPrice']) - float(quote_table[i]['CBestBidPrice']) 
             ])
 
     _df = pd.DataFrame(_temp, columns=['time', 'strike', 'mid_price', 'spread'])
-    _df['time'] = pd.to_datetime(_df['time'])
+    # _df['time'] = pd.to_datetime(_df['time'])
     _df['strike'] = _df['strike'].astype(str)
     _df['mid_price'] = pd.to_numeric(_df['mid_price'])
     _df['spread'] = pd.to_numeric(_df['spread'])
