@@ -5,7 +5,8 @@ from datetime import datetime, timedelta
 def strike_range_code(mkt_type: str, weekth: str):
     # network找getQuoteDetail
     url = "https://mis.taifex.com.tw/futures/api/getQuoteDetail"
-    payload = {"SymbolID":["TXF-S","TXFJ4-M","TXO-R"]}
+    _monthcode = 'K'
+    payload = {"SymbolID":["TXF-S",f"TXF{_monthcode}4-M","TXO-R"]}
     if (datetime.now() + timedelta(hours = 8)).hour >= 15:
         try:
             res = requests.post(url, json = payload).json()["RtData"]['QuoteList'][1]
@@ -24,7 +25,7 @@ def strike_range_code(mkt_type: str, weekth: str):
 def strike_range_df(src):
     mkt_tpye = "1"
     weekth = "TXO"
-    month = "10"
+    month = "10W4" #月選就10，而結算完變第四週選就後綴W4
     url =   "https://mis.taifex.com.tw/futures/api/getQuoteListOption"
     payload =  {"MarketType": mkt_tpye, "SymbolType":"O","KindID":"1","CID": weekth, "ExpireMonth": f"2024{month}","RowSize":"全部","PageNo":"","SortColumn":"","AscDesc":"A"}
     quote_table = requests.post(url, json = payload).json()["RtData"]['QuoteList']
@@ -53,7 +54,7 @@ def strike_range_df(src):
     return grouped_df.sort_values(['time', 'strike'])
 
 
-arg = strike_range_df(strike_range_code("1", "TXO")).to_string(index = False)
+arg = strike_range_df(strike_range_code("1", "TX4W4")).to_string(index = False)
 token = 'Ww9Y7PSHCNkdmdGkxpdPT54vMGf0VaZBoMZH7BudlVS'
 url = 'https://notify-api.line.me/api/notify'
 headers = {'Authorization': 'Bearer ' + token} 
