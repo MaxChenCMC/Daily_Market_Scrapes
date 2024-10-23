@@ -10,18 +10,25 @@ def strike_range_code(DispEName: str, mkt_type: str, contract_id: str, ExpireMon
     TXFK4-M, TXFK4-M
     '''
     try:
-        _monthcode = 'K'
+        # change per week contract
+        if mkt_type == "0":
+            arg1, arg2, arg3 = 'K', "F", "Q"
+        elif mkt_type == "1":
+            arg1, arg2, arg3 = 'K', "M", "R"
+            
         res = requests.post("https://mis.taifex.com.tw/futures/api/getQuoteDetail",
-                            json = {"SymbolID":["TXF-S", f"TXF{_monthcode}4-M", "TXO-R"]}
+                            json = {"SymbolID": ["TXF-S", f"TXF{arg1}4-{arg2}", f"TXO-{arg3}"]}
                             ).json()["RtData"]['QuoteList'][1]
         QRTime = datetime.strptime(res["CTime"], '%H%M%S').strftime('%H:%M:%S')
         last_close = float(res['CLastPrice'])
+        # 還要補抓漲跌跟日期
+        # last_change = float(res['漲跌'])
+        # daydate = float(res['日期印象中沒有'])
         close_to_strike = int(last_close / 50) * 50
         stike_range_code = []
-        for k in [(close_to_strike + i * 50) for i in range(-1,2)]:  # 暫時只取±1個履約價   更多就range(-2,3)或range(-3,4)
+        for k in [(close_to_strike + i * 50) for i in range(-1,2)]:
             stike_range_code.append(f'{DispEName + str(k)}C')
             stike_range_code.append(f'{DispEName + str(k)}P')
-        # return stike_range_code
         
         quote_table = requests.post("https://mis.taifex.com.tw/futures/api/getQuoteListOption", 
                                     json = {"MarketType": mkt_type,
@@ -29,15 +36,12 @@ def strike_range_code(DispEName: str, mkt_type: str, contract_id: str, ExpireMon
                                             "ExpireMonth": ExpireMonth, 
                                             "SymbolType":"O","KindID":"1","RowSize":"全部","PageNo":"","SortColumn":"","AscDesc":"A"},
                                     ).json()["RtData"]['QuoteList']
-        # return quote_table
         
-
         _temp = []
         for i in range(len(quote_table)):
             if quote_table[i]['DispEName'] in stike_range_code:
                 _temp.append([
-                    # 欄名： 'time', 'strike', 'mid_price', 'spread'
-                    QRTime,  # (datetime.now()+ timedelta(hours = 0)).strftime("%H:%M:%S"), 
+                    QRTime,
                     quote_table[i]['DispEName'][-6:-1],
                     (float(quote_table[i]['CBestAskPrice']) + float(quote_table[i]['CBestBidPrice'])) / 2,
                     float(quote_table[i]['CBestAskPrice']) - float(quote_table[i]['CBestBidPrice'])
@@ -58,7 +62,7 @@ def strike_range_code(DispEName: str, mkt_type: str, contract_id: str, ExpireMon
         print(e)
 
 
-arg = strike_range_code("TX4W4104;", "1", "TXO", "202410W4").to_string(index = False)
+arg = strike_range_code("TX5W5104;", "1", "TXO", "202410W5").to_string(index = False)
 token = 'Ww9Y7PSHCNkdmdGkxpdPT54vMGf0VaZBoMZH7BudlVS'
 url = 'https://notify-api.line.me/api/notify'
 headers = {'Authorization': 'Bearer ' + token} 
