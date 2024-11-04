@@ -12,18 +12,20 @@ def strike_range_code(DispEName: str, mkt_type: str, contract_id: str, ExpireMon
     try:
         # change per week contract
         if mkt_type == "0":
-            arg1, arg2, arg3 = 'K', "F", "Q"
+            arg1: str = "F"
+            arg2: str = "Q"
         elif mkt_type == "1":
-            arg1, arg2, arg3 = 'K', "M", "R"
+            arg1: str = "M"
+            arg2: str = "R"
             
         res = requests.post("https://mis.taifex.com.tw/futures/api/getQuoteDetail",
-                            json = {"SymbolID": ["TXF-S", f"TXF{arg1}4-{arg2}", f"TXO-{arg3}"]}
+                            json={"SymbolID": [
+                                # type: ignore
+                                # type: ignore
+                                "TXF-S", f"TXFK4-{arg1}", f"TXO-{arg2}"]}
                             ).json()["RtData"]['QuoteList'][1]
         QRTime = datetime.strptime(res["CTime"], '%H%M%S').strftime('%H:%M:%S')
         last_close = float(res['CLastPrice'])
-        # 還要補抓漲跌跟日期
-        # last_change = float(res['漲跌'])
-        # daydate = float(res['日期印象中沒有'])
         close_to_strike = int(last_close / 50) * 50
         stike_range_code = []
         for k in [(close_to_strike + i * 50) for i in range(-1,2)]:
@@ -62,7 +64,7 @@ def strike_range_code(DispEName: str, mkt_type: str, contract_id: str, ExpireMon
         print(e)
 
 
-arg = strike_range_code("TX5W5104;", "1", "TXO", "202410W5").to_string(index = False)
+arg = strike_range_code("TX1W1114;", "1", "TXO", "202411W1").to_string(index = False)
 token = 'Ww9Y7PSHCNkdmdGkxpdPT54vMGf0VaZBoMZH7BudlVS'
 url = 'https://notify-api.line.me/api/notify'
 headers = {'Authorization': 'Bearer ' + token} 
