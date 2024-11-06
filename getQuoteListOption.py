@@ -15,8 +15,8 @@ def strike_range_code(DispEName: str, mkt_type: str, contract_id: str, ExpireMon
             arg1: str = "F"
             arg2: str = "Q"
         elif mkt_type == "1":
-            arg1: str = "M"
-            arg2: str = "R"
+            arg1: str = "F"
+            arg2: str = "Q"
             
         res = requests.post("https://mis.taifex.com.tw/futures/api/getQuoteDetail",
                             json={"SymbolID": [
@@ -64,7 +64,7 @@ def strike_range_code(DispEName: str, mkt_type: str, contract_id: str, ExpireMon
         print(e)
 
 
-arg = strike_range_code("TX1W1114;", "1", "TXO", "202411W1").to_string(index = False)
+arg = strike_range_code("TX2W2114;", "1", "TXO", "202411W2").to_string(index = False)
 token = 'Ww9Y7PSHCNkdmdGkxpdPT54vMGf0VaZBoMZH7BudlVS'
 url = 'https://notify-api.line.me/api/notify'
 headers = {'Authorization': 'Bearer ' + token} 
