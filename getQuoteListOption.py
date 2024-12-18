@@ -16,9 +16,12 @@ data = [{QRTime : [item['DispEName'][9:15], (float(item['CBestAskPrice']) + floa
         for item in quote_table 
         if item['StrikePrice'] in [str(close_to_strike + i * 50) for i in range(-1,2)]]
 
+formatted_message = " | ".join(
+    f"{list(d.keys())[0]} {d[list(d.keys())[0]][0]}_成:{d[list(d.keys())[0]][1]}_差:{d[list(d.keys())[0]][2]}"
+    for d in data
+)
 
-# arg = strike_range_code("TXO114;", "1", "TXO", "202411").to_string(index = False)
 token = 'Ww9Y7PSHCNkdmdGkxpdPT54vMGf0VaZBoMZH7BudlVS'
 url = 'https://notify-api.line.me/api/notify'
 headers = {'Authorization': 'Bearer ' + token} 
-requests.post(url, headers = headers,  data={'message': data})
+requests.post(url, headers = headers,  data={'message': formatted_message})
