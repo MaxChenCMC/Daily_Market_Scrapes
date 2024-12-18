@@ -24,4 +24,4 @@ formatted_message = " | ".join(
 token = 'Ww9Y7PSHCNkdmdGkxpdPT54vMGf0VaZBoMZH7BudlVS'
 url = 'https://notify-api.line.me/api/notify'
 headers = {'Authorization': 'Bearer ' + token} 
-requests.post(url, headers = headers,  data={'message': formatted_message})
+requests.post(url, headers = headers,  data={'message': "\n" + formatted_message})
