@@ -6,7 +6,7 @@ res = requests.post("https://mis.taifex.com.tw/futures/api/getQuoteDetail", json
 last_close = float(res['CLastPrice'])
 close_to_strike = int(last_close / 50) * 50
 
-arg2 = "202501W2" # Network裡getQuoteListOption的paylaod的ExpireMonth
+arg2 = "202501" # Network裡getQuoteListOption的paylaod的ExpireMonth
 quote_table = requests.post("https://mis.taifex.com.tw/futures/api/getQuoteListOption",
                             json = {"MarketType": "1", "CID": "TXO", "ExpireMonth": arg2, "SymbolType": "O", "KindID": "1", "RowSize": "全部", "PageNo": "", "SortColumn": "", "AscDesc": "A"},
                             ).json()["RtData"]['QuoteList']
