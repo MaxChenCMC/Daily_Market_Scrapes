@@ -1,12 +1,12 @@
 import requests, pandas as pd
 from datetime import datetime, timedelta
 
-arg1 = "TXFB5-M" # Network裡getQuoteDetail的paylaod第二個值(第三個值好像也要)
+arg1 = "TXFC5-M" # Network裡getQuoteDetail的paylaod第二個值(第三個值好像也要)
 res = requests.post("https://mis.taifex.com.tw/futures/api/getQuoteDetail", json={"SymbolID": [ "TXF-S", arg1, "TXO-R"]}).json()["RtData"]['QuoteList'][1]
 last_close = float(res['CLastPrice'])
 close_to_strike = int(last_close / 50) * 50
 
-arg2 = "202502" # Network裡getQuoteListOption的paylaod的ExpireMonth
+arg2 = "202502W4" # Network裡getQuoteListOption的paylaod的ExpireMonth
 quote_table = requests.post("https://mis.taifex.com.tw/futures/api/getQuoteListOption",
                             json = {"MarketType": "1", "SymbolType": "O", "KindID": "1", "CID": "TXO", "ExpireMonth": arg2, "RowSize": "全部", "PageNo": "", "SortColumn": "", "AscDesc": "A"},
                             ).json()["RtData"]['QuoteList']
