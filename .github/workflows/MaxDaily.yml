@@ -1,7 +1,7 @@
 name: MaxDaily
 on:
   schedule:
-    - cron: '35 13 * * 1-5' 
+    - cron: '00 14 * * 1-5' 
   push:
     branches: [ main ]
 
