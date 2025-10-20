@@ -39,9 +39,11 @@ jobs:
         git config --global user.name "排程自動"
         git config --global user.email "hhpedo@gmail.com"
         git add tblMkt.csv
+        
+        git pull --rebase origin main # Pull remote changes before pushing
+
         if ! git diff --staged --quiet; then
           git commit -m "已寫入"
-          git pull --rebase origin main    # Add this line
           git push
         else
           echo "無異動故沒commit"
