@@ -34,11 +34,11 @@ jobs:
         
     - name: Commit and push if it changed
       run: |
-        git add path/tblMkt.csv
+        git add tblMkt.csv
         if ! git diff --staged --quiet; then
-          git commit -m "Automated CSV update"
+          git commit -m "已寫入"
           git push
         else
-          echo "No changes to commit."
+          echo "無異動故沒commit"
         fi
           
