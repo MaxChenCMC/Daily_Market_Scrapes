@@ -46,7 +46,7 @@ jobs:
         
         if ! git diff --staged --quiet; then
           git commit -m "已寫入"
-          git push
+          git push --force-with-lease origin main
         else
           echo "無異動故沒commit"
         fi
