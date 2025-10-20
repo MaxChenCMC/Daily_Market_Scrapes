@@ -33,7 +33,12 @@ jobs:
         
     - name: Run script # 執行腳本並將輸出附加到 CSV 檔案(使用 `>>` 運算子來append)
       run: python SddScrawler.py >> tblMkt.csv
-        
+
+    - name: Pull latest main before push
+      run: |
+        git fetch origin main
+        git rebase origin/main
+
     - name: Commit and push if it changed
       run: |
         git config --global user.name "排程自動"
