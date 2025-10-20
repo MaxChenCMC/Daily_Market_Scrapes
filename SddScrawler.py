@@ -3,6 +3,11 @@ import pandas as pd
 from bs4 import BeautifulSoup
 from datetime import datetime
 from io import StringIO
+from typing import List, Union
+
+
+# Type aliases
+NumberOrStr = Union[int, float, str]
 
 
 def TwseTradingForeignBfi82u():
@@ -35,6 +40,7 @@ def TwseTradingForeignBfi82u():
     except Exception as e:
         print(f"Error in TwseTradingForeignBfi82u: {e}")
         return ["-", "-"]
+
 
 def futContractsDate():
     """
@@ -84,6 +90,31 @@ def futContractsDate():
         print(f"Error in futContractsDate: {e}")
         return ["-", "-", "-", "-"]
 
+
+def futDailyMarketReport_OHLCV() -> List[NumberOrStr]:
+    '''Fetch futures daily market OHLCV data from TAIFEX
+
+    Returns:
+        List containing [open, high, low, close, volume]
+    '''
+    url = "https://www.taifex.com.tw/cht/3/futDailyMarketReport"
+    columns = ["開盤價", "最高價", "最低價", "最後 成交價", '*一般交易時段 成交量']
+
+    try:
+        df = pd.read_html(url, encoding="utf-8")[0]
+        ohlcv = df.loc[0, columns].values.tolist()
+        return [str(i) if i == "-" else int(i) for i in ohlcv]
+    except Exception as e:
+        print(f"Error fetching futures OHLCV: {e}")
+        return ["-"] * 5
+
+
+
+
+
+
+
+
 def get_all_market_data():
     """
     整合所有市場數據。
@@ -91,9 +122,9 @@ def get_all_market_data():
     Returns:
         List[Union[int, str]]: 包含所有市場數據的扁平化列表。
     """
-    twse_data = TwseTradingForeignBfi82u()
-    taifex_data = futContractsDate()
-    return twse_data + taifex_data
+    return [datetime.now().strftime('%Y-%m-%d')] + TwseTradingForeignBfi82u() + futContractsDate() + futDailyMarketReport_OHLCV()
+    # return  futDailyMarketReport_OHLCV()
+
 
 if __name__ == "__main__":
     market_data = get_all_market_data()
