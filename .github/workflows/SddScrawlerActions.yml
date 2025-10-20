@@ -34,20 +34,18 @@ jobs:
     - name: Run script # 執行腳本並將輸出附加到 CSV 檔案(使用 `>>` 運算子來append)
       run: python SddScrawler.py >> tblMkt.csv
 
-    - name: Pull latest main before push
-      run: |
-        git fetch origin main
-        git rebase origin/main
-
-    - name: Commit and push if it changed
+    - name: Pull latest changes
       run: |
         git config --global user.name "排程自動"
         git config --global user.email "hhpedo@gmail.com"
-        git add tblMkt.csv
+        git pull origin main --rebase
+
+    - name: Push changes
+      run: |
+        
         
         if ! git diff --staged --quiet; then
           git commit -m "Automated CSV update: $(date +'%Y-%m-%d %H:%M:%S')"
-          git pull origin main --rebase
           git push origin main
         else
           echo "無異動故沒commit"
