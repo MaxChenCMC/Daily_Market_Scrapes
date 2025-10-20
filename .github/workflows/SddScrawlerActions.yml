@@ -36,10 +36,6 @@ jobs:
       run: |
         git config --global user.name "排程自動"
         git config --global user.email "hhpedo@gmail.com"
-
-        git fetch origin main
-        git reset --hard origin/main
-        python SddScrawler.py >> tblMkt.csv
         git add tblMkt.csv
         
         # 根據上一步的輸出結果，設定 commit message
@@ -48,7 +44,7 @@ jobs:
         
         if ! git diff --staged --quiet; then
           git commit -m "已寫入"
-          git push --force-with-lease origin main
+          git push
         else
           echo "無異動故沒commit"
         fi
