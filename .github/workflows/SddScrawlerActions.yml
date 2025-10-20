@@ -18,8 +18,6 @@ jobs:
     steps:
     - name: Check out repository # 將repository程式碼 checkout 到 runner 環境
       uses: actions/checkout@v4
-      with: 
-        fetch-depth: 0  # 完整拉取歷史，避免 fetch 問題
       
     - name: Set up Python # 設定 Python 環境
       uses: actions/setup-python@v5
@@ -33,18 +31,24 @@ jobs:
         
     - name: Run script # 執行腳本並將輸出附加到 CSV 檔案(使用 `>>` 運算子來append)
       run: python SddScrawler.py >> tblMkt.csv
-
+        
     - name: Commit and push if it changed
       run: |
         git config --global user.name "排程自動"
         git config --global user.email "hhpedo@gmail.com"
+
+        git fetch origin main
+        git reset --hard origin/main
+        python SddScrawler.py >> tblMkt.csv
         git add tblMkt.csv
+        
+        # 根據上一步的輸出結果，設定 commit message
+        ACTION_TAKEN="${{ steps.csv_update.outputs.action }}"
+        COMMIT_MSG="Automated CSV ${ACTION_TAKEN}: data for $(date +'%Y-%m-%d')"
         
         if ! git diff --staged --quiet; then
           git commit -m "已寫入"
-          git pull --rebase origin main
-          git push
+          git push --force-with-lease origin main
         else
           echo "無異動故沒commit"
         fi
-          
