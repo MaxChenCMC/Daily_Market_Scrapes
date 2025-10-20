@@ -37,11 +37,11 @@ jobs:
     - name: Run script # 執行腳本並將輸出附加到 CSV 檔案(使用 `>>` 運算子來append)
       run: |
         source venv/bin/activate
-        python SddScrawler.py >> path/SddScrawler.csv
+        python SddScrawler.py >> tblMkt.csv
         
     - name: Commit and push if it changed
       run: |
-        git add path/SddScrawler.csv
+        git add path/tblMkt.csv
         if ! git diff --staged --quiet; then
           git commit -m "Automated CSV update"
           git push
