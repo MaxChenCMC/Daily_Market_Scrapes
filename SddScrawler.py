@@ -122,10 +122,12 @@ def get_all_market_data():
     Returns:
         List[Union[int, str]]: 包含所有市場數據的扁平化列表。
     """
-    return [datetime.now().strftime('%Y-%m-%d')] + TwseTradingForeignBfi82u() + futContractsDate() + futDailyMarketReport_OHLCV()
-    # return  futDailyMarketReport_OHLCV()
+    res = [datetime.now().strftime('%Y/%m/%d')] + TwseTradingForeignBfi82u() + futContractsDate() + futDailyMarketReport_OHLCV()
+    csv_string = ",".join(str(item) for item in res)
+    return csv_string
 
 
 if __name__ == "__main__":
     market_data = get_all_market_data()
     print(market_data)
+
