@@ -37,7 +37,9 @@ jobs:
         git config --global user.name "排程自動"
         git config --global user.email "hhpedo@gmail.com"
 
-        git pull --rebase origin main # 先拉取最新的遠端內容，使用 --rebase 避免衝突
+        git fetch origin main
+        git reset --hard origin/main
+        python SddScrawler.py >> tblMkt.csv
         git add tblMkt.csv
         
         # 根據上一步的輸出結果，設定 commit message
