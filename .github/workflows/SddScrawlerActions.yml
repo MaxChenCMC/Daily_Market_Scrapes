@@ -37,6 +37,11 @@ jobs:
         git config --global user.name "排程自動"
         git config --global user.email "hhpedo@gmail.com"
         git add tblMkt.csv
+        
+        # 根據上一步的輸出結果，設定 commit message
+        ACTION_TAKEN="${{ steps.csv_update.outputs.action }}"
+        COMMIT_MSG="Automated CSV ${ACTION_TAKEN}: data for $(date +'%Y-%m-%d')"
+        
         if ! git diff --staged --quiet; then
           git commit -m "已寫入"
           git push
