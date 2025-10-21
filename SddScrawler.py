@@ -4,8 +4,6 @@ from bs4 import BeautifulSoup
 from datetime import datetime
 from io import StringIO
 from typing import List, Union
-
-
 # Type aliases
 NumberOrStr = Union[int, float, str]
 
@@ -109,10 +107,62 @@ def futDailyMarketReport_OHLCV() -> List[NumberOrStr]:
         return ["-"] * 5
 
 
+def TwseOHLCV() -> List[NumberOrStr]:
+    '''Fetch TWSE index OHLCV data
+
+    Returns:
+        List containing [open, high, low, close, volume]
+    '''
+    url = "https://mis.twse.com.tw/stock/api/getStockInfo.jsp?json=1&delay=0&ex_ch=tse_t00.tw"
+    fields = ["o", "h", "l", "z", "v"]
+
+    try:
+        response = requests.get(url)
+        data = response.json()["msgArray"][0]
+
+        # Convert and adjust volume
+        values = [float(data.get(field, "-")) for field in fields]
+        values[-1] /= 100  # Adjust volume
+        return values
+    except Exception as e:
+        print(f"Error fetching TWSE OHLCV: {e}")
+        return ["-"] * 5
 
 
+def TaifexPcRatio() -> List[NumberOrStr]:
+    '''Fetch Put/Call ratio data from TAIFEX
+
+    Returns:
+        List containing [volume_ratio, OI_ratio]
+    '''
+    url = "https://www.taifex.com.tw/cht/3/pcRatio"
+    columns = ["日期", "買賣權成交量比率%", "買賣權未平倉量比率%"]
+
+    try:
+        df = pd.read_html(url, encoding="utf-8")[0]
+        ratios = df.iloc[0][columns].values[1:]
+        return [float(ratio) for ratio in ratios]
+    except Exception as e:
+        print(f"Error fetching P/C ratio: {e}")
+        return ["-", "-"]
 
 
+def histock_2330() -> List[NumberOrStr]:
+    '''Fetch TSMC (2330) institutional investor data
+
+    Returns:
+        List containing [foreign_net, total_net]
+    '''
+    url = "https://histock.tw/stock/chips.aspx?no=2330"
+    columns = ["日期", "外資", "總計"]
+
+    try:
+        df = pd.read_html(url)[0][columns].head(1)
+        values = df.iloc[0].values[-2:]
+        return [int(val) for val in values]
+    except Exception as e:
+        print(f"Error fetching TSMC data: {e}")
+        return ["-", "-"]
 
 
 def get_all_market_data():
@@ -122,7 +172,7 @@ def get_all_market_data():
     Returns:
         List[Union[int, str]]: 包含所有市場數據的扁平化列表。
     """
-    res = [datetime.now().strftime('%Y/%m/%d')] + TwseTradingForeignBfi82u() + futContractsDate() + futDailyMarketReport_OHLCV()
+    res = [datetime.now().strftime('%Y/%m/%d')] + TwseTradingForeignBfi82u() + futContractsDate() + futDailyMarketReport_OHLCV() + TwseOHLCV() + TaifexPcRatio() + histock_2330()
     csv_string = ",".join(str(item) for item in res)
     return csv_string
 
@@ -130,4 +180,3 @@ def get_all_market_data():
 if __name__ == "__main__":
     market_data = get_all_market_data()
     print(market_data)
-
