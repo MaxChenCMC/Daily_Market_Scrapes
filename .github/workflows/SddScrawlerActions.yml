@@ -19,7 +19,8 @@ jobs:
     - name: Check out repository # 將repository程式碼 checkout 到 runner 環境
       uses: actions/checkout@v4
       with:
-        fetch-depth: 0  # 確保取得完整歷史記錄
+        ref: main  # 明確指定 branch
+        fetch-depth: 1  # 只需要最新版本
         
     - name: Set up Python # 設定 Python 環境
       uses: actions/setup-python@v5
@@ -31,13 +32,42 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         
-    - name: Run script # 執行腳本並將輸出附加到 CSV 檔案(使用 `>>` 運算子來append)
-      run: python SddScrawler.py >> tblMkt.csv
+    # - name: Run script # 執行腳本並將輸出附加到 CSV 檔案(使用 `>>` 運算子來append)
+    #   run: python SddScrawler.py >> tblMkt.csv
+        
+    # - name: Commit and push if it changed
+    #   uses: stefanzweifel/git-auto-commit-action@v5
+    #   with:
+    #     commit_message: "已寫入: data for $(date +'%Y-%m-%d')"
+    #     file_pattern: tblMkt.csv
+    #     commit_user_name: 排程自動
+    #     commit_user_email: hhpedo@gmail.com
+
+    - name: Run script and update CSV
+      run: |
+        # 執行爬蟲腳本，輸出到臨時檔案
+        python SddScrawler.py > temp_output.txt
+        
+        # 取得今天的日期
+        TODAY=$(date +'%Y-%m-%d')
+        
+        # 如果 CSV 存在，刪除今天的舊資料（假設日期在第一欄）
+        if [ -f tblMkt.csv ]; then
+          # 保留 header 和非今日的資料
+          head -1 tblMkt.csv > temp.csv
+          tail -n +2 tblMkt.csv | grep -v "^${TODAY}" >> temp.csv || true
+          mv temp.csv tblMkt.csv
+        fi
+        
+        # 添加新資料
+        cat temp_output.txt >> tblMkt.csv
+        rm temp_output.txt
         
     - name: Commit and push if it changed
       uses: stefanzweifel/git-auto-commit-action@v5
       with:
-        commit_message: "已寫入: data for $(date +'%Y-%m-%d')"
+        commit_message: "已更新: data for $(date +'%Y-%m-%d')"
         file_pattern: tblMkt.csv
         commit_user_name: 排程自動
         commit_user_email: hhpedo@gmail.com
+        pull_strategy: '--rebase --autostash'
