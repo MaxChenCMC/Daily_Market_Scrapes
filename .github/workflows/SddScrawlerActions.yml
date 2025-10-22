@@ -62,11 +62,15 @@ jobs:
         # 添加新資料
         cat temp_output.txt >> tblMkt.csv
         rm temp_output.txt
+
+    - name: (非必要)日期變數讓yml檔自己用
+      id: date
+      run: echo "TODAY=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
         
     - name: Commit and push if it changed
       uses: stefanzweifel/git-auto-commit-action@v5
       with:
-        commit_message: "已更新: data for $(date +'%Y-%m-%d')"
+        commit_message: "已更新: data for ${{ steps.date.outputs.TODAY }}"
         file_pattern: tblMkt.csv
         commit_user_name: 排程自動
         commit_user_email: hhpedo@gmail.com
