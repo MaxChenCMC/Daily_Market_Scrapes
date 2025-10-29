@@ -47,7 +47,7 @@ def TwseOHLCV() -> list[float, float, float, float, float]:
     url = "https://mis.twse.com.tw/stock/api/getStockInfo.jsp?json=1&delay=0&ex_ch=tse_t00.tw"
     try:
         src = requests.get(url).json()["msgArray"][0]
-        tse_ohlcv = [float(src.get(i)) for i in ["o","h","l","z","v"]]
+        tse_ohlcv = [float(src.get(i)) for i in ["o","h","l","z","m"]] #原v
         tse_ohlcv[-1] /= 100
         return tse_ohlcv
     except Exception:
@@ -79,4 +79,5 @@ arg = TwseTradingForeignBfi82u()+futContractsDate()+futDailyMarketReport_OHLCV()
 token = 'Ww9Y7PSHCNkdmdGkxpdPT54vMGf0VaZBoMZH7BudlVS'
 url = 'https://notify-api.line.me/api/notify'
 headers = {'Authorization': 'Bearer ' + token} 
+
 response = requests.post(url, headers = headers,  data={'message': arg})
