@@ -4,4 +4,5 @@
 !MaxDaily.py
 !tblMkt.csv
 !.github/
-!.github/fixed_time_trigger.yml
+!.github/workflows/
+!.github/workflows/fixed_time_trigger.yml
