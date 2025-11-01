@@ -3,4 +3,5 @@
 !requirements.txt
 !MaxDaily.py
 !tblMkt.csv
+!.github/
 !.github/fixed_time_trigger.yml

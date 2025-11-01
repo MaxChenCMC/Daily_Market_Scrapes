@@ -1,2 +1,0 @@
-# LineNotifyRelease
-Crawling Then Notify
